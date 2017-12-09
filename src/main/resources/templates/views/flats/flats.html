@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="layout">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Title</title>
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/custom.css" th:href="@{/css/custom.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="..static/css/bootstrap-languages/languages.min.css"
+          th:href="@{/css/bootstrap-languages/languages.min.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <!--<div id="flatsHeader" class="page-header"><h1>Квартиры 12</h1></div>-->
+
+    <div class="row">
+        <div class="col-md-3 hidden-print">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.flats.filters_panel_heading}">Подбор квартир</span>
+                </div>
+
+                <div class="panel-body">
+                    <form class="col-md-12" id="filters" th:action="@{/flats/search}" th:object="${filters}"
+                          method="get">
+                        <input id="page" th:value="${page.number}" type="hidden" name="page"/>
+                        <input id="size" th:value="${page.size}" type="hidden" name="size"/>
+                        <div class="form-horizontal">
+
+                            <div class="form-group ">
+                                <div class="col-md-12">
+                                    <select th:field="*{typeTrade}" id="typeTrade" value="SALE" type="text"
+                                            class="form-control">
+                                        <option value="SALE"
+                                            th:text="#{captions.fields.type_trade.sale}">Продажа</option>
+                                        <option value="RENT"
+                                                th:text="#{captions.fields.type_trade.rent}">Аренда</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input id="district" th:field="*{district}" type="text" class="form-control"
+                                           list="districtList"
+                                           th:placeholder="#{captions.fields.district}"/>
+                                    <datalist id="districtList">
+                                        <option th:each="district : ${districts}"
+                                                th:value="${district}"
+                                                th:text="${district}"
+                                        ></option>
+                                    </datalist>
+                                </div>
+                            </div>
+
+                            <div>
+                                <fieldset>
+                                    <legend th:text="#{captions.fields.price}">Цена</legend>
+                                    <div class="form-group row">
+
+                                        <div class="col-xs-5">
+                                            <input id="minPrice" th:field="*{minPrice}" type="text"
+                                                   class="form-control"
+                                                   th:placeholder="#{captions.from}" onkeypress='onlyNumbers(event)'/>
+                                        </div>
+                                        <div class="col-xs-2"></div>
+
+                                        <div class="col-xs-5">
+                                            <input id="maxPrice" th:field="*{maxPrice}" type="text"
+                                                   class="form-control"
+                                                   th:placeholder="#{captions.to}" onkeypress='onlyNumbers(event)'/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div>
+                                <fieldset>
+                                    <legend th:text="#{captions.fields.area}">Площадь</legend>
+                                    <div class="form-group row">
+
+                                        <div class="col-xs-5">
+                                            <input id="minArea" th:field="*{minArea}" type="text" class="form-control"
+                                                   th:placeholder="#{captions.from}" onkeypress='onlyNumbers(event)'/>
+                                        </div>
+                                        <div class="col-xs-2"></div>
+                                        <div class="col-xs-5">
+                                            <input id="maxArea" th:field="*{maxArea}" type="text" class="form-control"
+                                                   th:placeholder="#{captions.to}" onkeypress='onlyNumbers(event)'/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div>
+                                <fieldset>
+                                    <legend th:text="#{captions.fields.rooms}">Комнаты</legend>
+                                    <div class="form-group row">
+
+                                        <div class="col-xs-5">
+                                            <input id="minRoom" th:field="*{minRoom}" type="text" class="form-control"
+                                                   th:placeholder="#{captions.from}" onkeypress='onlyNumbers(event)'/>
+                                        </div>
+                                        <div class="col-xs-2"></div>
+                                        <div class="col-xs-5">
+                                            <input id="maxRoom" th:field="*{maxRoom}" type="text" class="form-control"
+                                                   th:placeholder="#{captions.to}" onkeypress='onlyNumbers(event)'/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div>
+                                <fieldset>
+                                    <legend th:text="#{captions.fields.floor}">Этажи</legend>
+                                    <div class="form-group row">
+                                        <div class="col-xs-5">
+                                            <input id="minFloor" th:field="*{minFloor}" type="text"
+                                                   class="form-control"
+                                                   th:placeholder="#{captions.from}" onkeypress='onlyNumbers(event)'/>
+                                        </div>
+                                        <div class="col-xs-2"></div>
+                                        <div class="col-xs-5">
+                                            <input id="maxFloor" th:field="*{maxFloor}" type="text"
+                                                   class="form-control"
+                                                   th:placeholder="#{captions.to}" onkeypress='onlyNumbers(event)'/>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+
+                            <div class="form-group col-md-12">
+                                <div class="checkbox">
+                                    <label>
+                                        <input th:field="*{reserved}" id="reserved" type="checkbox"/><span th:text="#{captions.fields.show_reserves}">Показать
+                                        резервы</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <button th:onclick="'searchFlats(0, ' + ${page.size} + ')'"
+                                            class="btn btn-primary form-control" type="button"><span th:text="#{captions.search_field}">Поиск</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${page != null}" id="serachResult" class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.flats.result_panel_heading}">Просмотр квартир</span>
+                </div>
+                <div class="panel-body">
+
+
+                    <div th:if="${page.finish >= 0}" id="topPagination" class="col-xs-12">
+                        <ul class="pagination">
+                            <li th:class="${page.first} ? 'disabled':''" style="display:inline">
+                                <span th:if="${page.first}">&laquo;</span>
+                                <a th:if="${not page.first}" href="javascript:void(0)"
+                                   th:onclick="'searchFlats(' + 0 + ', ' + ${page.size} + ')'">&laquo;</a>
+                            </li>
+                            <li th:each="i : ${#numbers.sequence(page.start, page.finish)}"
+                                th:class="(${i}==${page.number})? 'active' : ''" style="display:inline">
+                                <span th:if='${i}==${page.number}' th:text='${i+1}'>1</span>
+                                <a th:if='${i}!=${page.number}'
+                                   th:onclick="@{'searchFlats(' + ${i} + ' , ' + ${page.size} + ')'}"
+                                   href="javascript:void(0)">
+                                    <span th:text='${i+1}'>1</span>
+                                </a>
+                            </li>
+                            <li th:class="${page.last} ? 'disabled':''" style="display:inline">
+                                <span th:if="${page.last}">&raquo;</span>
+                                <a th:if="${not page.last}"
+                                   href="javascript:void(0)"
+                                   th:onclick="'searchFlats(' + (${page.totalPages}-1) + ', ' + ${page.size} + ')'">&raquo;</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div id="resultContainer">
+
+                        <div id="flatContainer" th:each="flat: ${page.content}" class="col-md-4">
+                            <div class="panel" th:classappend="(${flat.reserved})?'panel-danger':'panel-default'">
+                                <div class="panel-heading">
+                                    <h5><a th:href="@{/flats/overview/} + ${flat.id}">
+                                        <span th:inline="text">[[${flat.rooms}]]-[[#{captions.flats.text_1}]], [[${flat.floor}]] [[#{captions.flats.text_2}]]</span>
+                                    </a></h5>
+
+                                </div>
+                                <div class="panel-body">
+
+                                    <div th:inline="text">[[#{captions.fields.type_trade}]]: [[#{'captions.fields.type_trade.' + ${#strings.toLowerCase(flat.typeTrade)}}]]</div>
+                                    <img th:if="${flat.imagesPath.empty}" th:src="@{/images/no-photo.jpg}"
+                                         class="img-responsive"/>
+
+                                    <div th:if="${!flat.imagesPath.empty}" th:id="'carousel'+${flat.id}"
+                                         class="carousel slide" data-ride="carousel"
+                                         data-interval="false">
+
+                                        <div class="carousel-inner">
+                                            <div class="item" th:each="img,imgStat: ${flat.imagesPath}"
+                                                 th:classappend="${imgStat.count eq 1}?'active':''">
+                                                <img th:src="${img}" class="img-responsive"/>
+                                            </div>
+                                        </div>
+                                        <a class="left carousel-control" th:href="'#carousel'+${flat.id}"
+                                           data-slide="prev">
+                                            <span class="glyphicon glyphicon-chevron-left"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="right carousel-control" th:href="'#carousel'+${flat.id}"
+                                           data-slide="next">
+                                            <span class="glyphicon glyphicon-chevron-right"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
+
+
+                                    <div th:inline="text"><b>[[#{captions.fields.price}]]: [[${flat.price}]]</b></div>
+                                    <div th:inline="text">[[#{captions.fields.district}]]: [[${flat.district}]]</div>
+                                    <!--<div th:inline="text">[[${flat.address}]]</div>-->
+                                    <div th:inline="text">[[#{captions.fields.area}]]: [[${flat.area}]] [[#{captions.m}]]<sup>2</sup></div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div th:if="${page.finish >= 0}" id="bottomPagination" class="col-xs-12">
+                        <ul class="pagination">
+                            <li th:class="${page.first} ? 'disabled':''" style="display:inline">
+                                <span th:if="${page.first}">&laquo;</span>
+                                <a th:if="${not page.first}" href="javascript:void(0)"
+                                   th:onclick="'searchFlats(' + 0 + ', ' + ${page.size} + ')'">&laquo;</a>
+                            </li>
+                            <li th:each="i : ${#numbers.sequence(page.start, page.finish)}"
+                                th:class="(${i}==${page.number})? 'active' : ''" style="display:inline">
+                                <span th:if='${i}==${page.number}' th:text='${i+1}'>1</span>
+                                <a th:if='${i}!=${page.number}'
+                                   th:onclick="@{'searchFlats(' + ${i} + ' , ' + ${page.size} + ')'}"
+                                   href="javascript:void(0)">
+                                    <span th:text='${i+1}'>1</span>
+                                </a>
+                            </li>
+                            <li th:class="${page.last} ? 'disabled':''" style="display:inline">
+                                <span th:if="${page.last}">&raquo;</span>
+                                <a th:if="${not page.last}"
+                                   href="javascript:void(0)"
+                                   th:onclick="'searchFlats(' + (${page.totalPages}-1) + ', ' + ${page.size} + ')'">&raquo;</a>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="../static/js/flats.js" th:src="@{/js/flats.js}"></script>
+</div>
+</body>
+
+</html>

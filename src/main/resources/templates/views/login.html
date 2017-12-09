@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="layout">
+
+<div layout:fragment="content">
+
+    <style type="text/css">
+        body, html {
+            min-height: 100% !important;
+            background: url("/images/log_bg.jpg") no-repeat fixed center center !important;
+            -webkit-background-size: cover !important;
+            -moz-background-size: cover !important;
+            -o-background-size: cover !important;
+            background-size: cover !important;
+        }
+    </style>
+    <div id="page_head">
+        <h1 style="color: #BCBCBC" th:text="#{captions.title}">Realtor firma "Capital"</h1>
+    </div>
+
+    <div class="row">
+        <div id="login_panel" class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.authorization}">Авторизация</span>
+                </div>
+                <div class="panel-body">
+                <form th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <label th:text="#{captions.fields.username}" >User Name</label>
+                        <input class="form-control" type="text" name="username" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{captions.fields.password}">Password</label>
+                        <input class="form-control" type="password" name="password" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-default form-control" type="submit">
+                            <span th:text="#{captions.login}">Вход</span>
+                        </button>
+                    </div>
+                    <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                        <span th:text="#{message.errors.authorization.fail}">Invalid username and password.</span>
+                    </div>
+
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</html>

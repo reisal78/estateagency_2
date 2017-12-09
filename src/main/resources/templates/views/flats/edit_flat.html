@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="layout">
+
+<div layout:fragment="content">
+    <div class="page-header">
+        <h1 th:text="#{captions.flats.edit.page_heading}">Квартиры</h1>
+    </div>
+    <div class="row">
+        <div id="flatForm" class="col-xs-12 col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.flats.edit.panel_heading}">Квартира</span>
+                    <a class="pull-right" th:href="@{'/flats/remove/' + ${flatDto.id}}" href="#" aria-label="Delete">
+                        <i class="fa fa-trash-o fa-1x" aria-hidden="true" style="color:#8a000b"></i>
+                    </a>
+
+                </div>
+                <div class="panel-body">
+                    <form th:action="@{/flats/edit}" th:object="${flatDto}" method="post">
+                        <input id="id" type="hidden" th:field="*{id}"/>
+                        <div th:if="${removeError != null}" class="alert alert-danger" role="alert">
+                            <h4 th:text="#{message.errors.remove_error}">Ошибка при удалении!</h4>
+                            <small th:text="#{message.errors.remove_error.comment}">Перед удалением необходимо удалить зависимые объекты</small>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label" th:text="#{captions.fields.type_trade}">Тип</label>
+                            <select th:field="*{typeTrade}" class="form-control ">
+                                <option th:each="type : ${flatDto.allTypeTrades}"
+                                        th:value="${type}"
+                                        th:text="#{'captions.fields.type_trade.' + ${#strings.toLowerCase(type)}}">
+                                    Type Trade
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('district')}?'has-error'">
+                            <label class="control-label" th:text="#{captions.fields.district}">Район</label>
+                            <input th:field="*{district}" class="form-control" type="text" list="districts"/>
+                            <datalist id="districts">
+                                <option th:each="d : ${districtList}"
+                                        th:value="${d}"
+                                        th:text="${d}"
+                                ></option>
+                            </datalist>
+                            <span class="help-block" th:errors="*{district}">[error]</span>
+                        </div>
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('address')}?'has-error'">
+                            <label class="control-label" th:text="#{captions.fields.address}">Адрес</label>
+                            <input th:field="*{address}" type="text" class="form-control"/>
+                            <span class="help-block" th:errors="*{address}">[error]</span>
+                        </div>
+                        <div class="form-group col-sm-6"
+                             th:classappend="${#fields.hasErrors('area')}?'has-error'">
+                            <label class="control-label" th:text="#{captions.fields.area}">Площадь</label>
+                            <input th:field="*{area}" type="text" class="form-control"></input>
+                        </div>
+                        <div class="form-group col-sm-6"
+                             th:classappend="${#fields.hasErrors('rooms')}?'has-error'">
+                            <label class="control-label" th:text="#{captions.fields.rooms}">Комнаты</label>
+                            <input th:field="*{rooms}" type="text" class="form-control"></input>
+                        </div>
+                        <div class="form-group col-sm-6"
+                             th:classappend="${#fields.hasErrors('floor')}?'has-error'">
+                            <label class="control-label" th:text="#{captions.fields.floor}">Этаж</label>
+                            <input th:field="*{floor}" type="text" class="form-control"></input>
+                        </div>
+                        <div class="form-group col-sm-6"
+                             th:classappend="${#fields.hasErrors('price')}?'has-error'">
+                            <label class="control-label" th:text="#{captions.fields.price}">Цена</label>
+                            <input th:field="*{price}" type="text" class="form-control"/>
+                        </div>
+                        <input th:field="*{ownerId}" type="hidden" id="ownerId"/>
+
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('ownerFullName')}?'has-error'">
+                            <label class="control-label" th:text="#{captions.fields.owner}">Владелец</label>
+                            <div class="input-group">
+                                <input th:field="*{ownerFullName}" id="owner" type="text" class="form-control"
+                                       readonly="readonly"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default form-control" onclick="showOwnersList()" type="button"><i
+                                            class="fa fa-search"
+                                            aria-hidden="true"></i></button>
+                                </span>
+                            </div>
+                            <span class="help-block" th:errors="*{ownerFullName}">[error]</span>
+                        </div>
+                        <input type="hidden" th:field="*{reserved}"/>
+                        <input type="hidden" th:field="*{available}"/>
+                        <div class="form-group col-sm-12">
+                            <button type="submit" class="btn btn-primary form-control">
+                                <span th:text="#{captions.save}">Сохранить</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="ownersSearch" class="col-xs-12 col-md-5 hidden">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.owners.find_panel_heading}">Поиск владельцев</span> <span class="pull-right"><a href="javascript:void(0)"
+                                                                                                                              onclick="closeOwnersList()"><i class="fa fa-times"
+                                                                                                                                                             aria-hidden="true"></i></a></span>
+                </div>
+                <div class="panel-body">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input id="search" type="text" th:value="${search}" name="search"
+                                   class="form-control"
+                                   th:placeholder="#{captions.search_field}"
+                                   placeholder="Search"/>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" onclick="searchOwners()" class="btn btn-default"><i
+                                    class="fa fa-search"
+                                    aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <a id="clearSearch" href="javascript:void(0)" onclick="clearOwnerSearch()"
+                               class="btn btn-default hidden"><i
+                                    class="fa fa-times" style="color:#c9302c" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+
+                    <table id="searchResult" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>№</th>
+                            <th th:text="#{captions.fields.fullname}">Full Name</th>
+                            <th th:text="#{captions.fields.passport}">Passport</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <ul class="pagination" id="pagination">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${flatDto.id != null}" id="flatsImages" class="col-xs-12 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.flats.edit.panel_photo_heading}">Фотографии</span>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group col-sm-12">
+                        <form id="uploadForm" th:action="@{/flats/upload}" method="post" enctype="multipart/form-data">
+                            <label class="control-label" th:text="#{captions.fields.upload_photo}">Загрузить фотографию</label>
+                            <div class="input-group">
+                                <input id="imageName" type="text" class="form-control" readonly="readonly"/>
+                                <input id="file" name="file" type="file" class="hidden"/>
+                                <span class="input-group-btn">
+                                <button id="browseImage" class="btn btn-default" type="button"><i
+                                        class="fa fa-search"
+                                        aria-hidden="true"></i>
+                                </button>
+                                <button id="uploadImage" class="btn btn-default disabled" type="button"
+                                        onclick="uploadFile()" disabled="disabled">
+                                    <i class="fa fa-upload" aria-hidden="true"></i>
+                                </button>
+                                    <input type="hidden" name="flatId" th:value="${flatDto.id}"/>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <table class="table col-sm-12">
+                        <tr th:id="${flatImage.id}" th:each="flatImage: ${flatImages}">
+                            <td><img th:src="'/files/' + ${flatDto.id} + '/' + ${flatImage.url}" class="img-responsive"/> </td>
+                            <td><button class="btn btn-default" th:onclick="'removeImage(' + ${flatImage.id} + ')'" ><i class="fa fa-trash-o" aria-hidden="true"></i></button></td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="../static/js/flats.js" th:src="@{/js/flats.js}"></script>
+</div>
+</html>

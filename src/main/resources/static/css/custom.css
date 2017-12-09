@@ -1,0 +1,69 @@
+body, html {
+    height: 100%;
+    background: url("/images/bg.jpg") no-repeat fixed center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.pagination {
+    margin: 1px;
+}
+
+.panel-body {
+    padding: 10px;
+}
+
+#flatsHeader {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+}
+
+#filters legend{
+    font-size: 11pt;
+    margin-bottom: 10px;
+}
+
+#resultContainer img {
+    min-height: 165px;
+    max-height: 165px;
+}
+
+#content {
+    /*margin-top: 40px;*/
+    /*min-height: 100%;*/
+    padding-top: 70px;
+}
+
+
+#footer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+#page_head {
+    position: fixed;
+    top: 80px;
+    left: 50px;
+    z-index: 1;
+}
+
+#login_panel{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+}
+
+#index-carousel .item{
+    height: 100%;
+    background: #333 no-repeat fixed center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+

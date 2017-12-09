@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="layout">
+
+<div layout:fragment="content">
+
+    <div class="page-header">
+        <h1 th:text="#{captions.flats.overview.page_heading}">Подробная информация</h1>
+        <ul th:if="${flat.available}" class="nav nav-pills">
+            <li th:if="${!flat.reserved}">
+                <a th:href="'/contracts/'+ ${#strings.toLowerCase(flat.typeTrade)} + '/create?id=' + ${flat.id}"
+                   class="hidden-print">
+                    <i class="fa fa-bell-o" aria-hidden="true"></i>
+                    <span th:text="#{captions.reserve}">Зарезервировать</span>
+                </a>
+            </li>
+            <li th:if="${flat.reserved}">
+                <a th:href="'/contracts/'+ ${#strings.toLowerCase(flat.typeTrade)} + '/delete?id=' + ${flat.id}"
+                   class="hidden-print">
+                    <i class="fa fa-bell-slash-o" aria-hidden="true"></i>
+                    <span th:text="#{captions.remove_reserve}">Снять резерв</span>
+                </a>
+            </li>
+            <!--<li th:if="${flat.reserved}">-->
+                <!--<a th:href="'/contracts/'+ ${#strings.toLowerCase(flat.typeTrade)} + '/edit?id=' + ${flat.id}"-->
+                   <!--class="hidden-print">-->
+                    <!--<i class="fa fa-folder-open-o" aria-hidden="true"></i>-->
+                    <!--<span th:text="#{captions.create_contract}">Открыть контракт</span>-->
+                <!--</a>-->
+            <!--</li>-->
+            <li th:if="${flat.reserved}">
+                <a th:href="'/contracts/'+ ${#strings.toLowerCase(flat.typeTrade)} + '/overview/' + ${flat.id}"
+                   class="hidden-print">
+                    <i class="fa fa-folder-open-o" aria-hidden="true"></i>
+                    <span th:text="#{captions.show_contract}">Открыть контракт</span>
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+    <div class="row">
+
+
+        <div class="col-md-4">
+
+            <div class="panel" th:classappend="(${flat.available})? (${flat.reserved}?'panel-danger':'panel-default') :'panel-success'">
+                <div class="panel-heading">
+                    <span th:text="#{captions.flats.overview.panel_heading}">Информация</span>
+                    <a th:if="${flat.available}" th:href="'/flats/edit?id=' + ${flat.id}" class="hidden-print pull-right">
+                        <i class="fa fa-pencil-square-o fa-2x" aria-hidden="true"></i>
+                </a>
+
+                </div>
+                <div class="panel-body">
+
+                    <div class="col-xs-12">
+
+                    </div>
+
+                    <div class="form-horizontal col-xs-12">
+
+                        <div class="form-group">
+                            <div class="col-xs-3" th:text="#{captions.fields.type_trade}">Тип</div>
+                            <div class="col-xs-9">
+                                <div th:text="#{'captions.fields.type_trade.' + ${#strings.toLowerCase(flat.typeTrade)}}">TypeTrade</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-3" th:text="#{captions.fields.district}">Район</div>
+                            <div class="col-xs-9">
+                                <div th:text="${flat.district}"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-3" th:text="#{captions.fields.address}">Адрес</div>
+                            <div class="col-xs-9">
+                                <div th:text="${flat.address}"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-3" th:text="#{captions.fields.price}">Цена</div>
+                            <div class="col-xs-9">
+                                <div th:text="${flat.price}">TypeTrade</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-3" th:text="#{captions.fields.area}">Площадь</div>
+                            <div class="col-xs-9">
+                                <div th:text="${flat.area}">TypeTrade</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-3" th:text="#{captions.fields.floor}">Этаж</div>
+                            <div class="col-xs-9">
+                                <div th:text="${flat.floor}">TypeTrade</div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-xs-3" th:text="#{captions.fields.rooms}">Комнаты</div>
+                            <div class="col-xs-9">
+                                <div th:text="${flat.rooms}">TypeTrade</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-3" th:text="#{captions.fields.owner}">Владелец</div>
+                            <div class="col-xs-9">
+                                <div th:text="${flat.ownerFullName}">TypeTrade</div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div th:if="${#lists.size(flat.imagesPath) > 0}" class="col-md-8">
+            <div class="panel" th:classappend="(${flat.available})? (${flat.reserved}?'panel-danger':'panel-default') :'panel-success'">
+                <div class="panel-heading">
+                    <span th:text="#{captions.flats.edit.panel_photo_heading}">Фотографии</span>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-6" th:each="path: ${flat.imagesPath}">
+                        <img th:src="${path}" class="img-thumbnail img-responsive"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+</html>

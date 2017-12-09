@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="layout">
+
+<div layout:fragment="content">
+    <div class="page-header">
+        <h1 th:text="#{captions.realtors.create.page_heading}">Риелторы</h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading"
+                     th:text="#{captions.realtors.create.panel_heading}">
+                    Новый риелтор
+                </div>
+                <div class="panel-body">
+                    <form th:action="@{/realtors/create}"
+                          th:object="${form}" method="post">
+                        <input id="id" type="hidden" th:field="*{id}"/>
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('fullName')}?'has-error'">
+                            <label class="control-label" for="fullName"
+                                   th:text="#{captions.fields.fullname}">
+                                Фамилия, Имя, Отчество</label>
+                            <input id="fullName" type="text" class="form-control" th:field="*{fullName}" onkeypress="onlyLetters(event)"/>
+                            <span class="help-block" th:errors="*{fullName}">[error]</span>
+                        </div>
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('phone')}?'has-error'">
+                            <label class="control-label" for="phone"
+                                   th:text="#{captions.fields.phone}">
+                                Номер телефона</label>
+                            <input id="phone" type="text" class="form-control" onkeypress="phoneNumber(event)" th:field="*{phone}"/>
+                            <span class="help-block" th:errors="*{phone}">[error]</span>
+                        </div>
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('username')}?'has-error'">
+                            <label class="control-label" for="username"
+                                   th:text="#{captions.fields.username}">Логин</label>
+                            <input id="username" type="text" class="form-control" th:field="*{username}"/>
+                            <span class="help-block" th:errors="*{username}">[error]</span>
+                        </div>
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('password')}?'has-error'">
+                            <label class="control-label" for="password"
+                                   th:text="#{captions.fields.password}">Пароль</label>
+                            <input id="password" type="password" class="form-control"
+                                   th:field="*{password}"/>
+                            <span class="help-block" th:errors="*{password}">[error]</span>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label" for="password"
+                                   th:text="#{captions.fields.authority}">Права пользователя</label>
+                            <select id="authority" class="form-control"
+                                    th:field="*{authority}">
+                                <option th:each="authority : ${form.authorities}"
+                                        th:value="${authority}"
+                                        th:text="${authority}">
+
+                                </option>
+                            </select>
+
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <div class="checkbox">
+                                <label>
+                                    <input th:field="*{enabled}" id="enabled" type="checkbox"/>
+                                    <span th:text="#{captions.fields.enabled}"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <input class="btn btn-primary form-control" type="submit" th:value="#{captions.save}"/>
+                        </div>
+                    </form>
+
+                    <form>
+
+                    </form>
+                    <form>
+
+                    </form>
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml"
+      th:with="lang=${#locale.language}"
+      th:lang="${lang}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:text="#{captions.title}">Title</title>
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/custom.css" th:href="@{/css/custom.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="..static/css/bootstrap-languages/languages.min.css"
+          th:href="@{/css/bootstrap-languages/languages.min.css}" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="container" id="content">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#nav_bar" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><i class="fa fa-home fa-1x" aria-hidden="true"></i></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="nav_bar">
+                <ul th:if="${#httpServletRequest.remoteUser} != null" class="nav navbar-nav">
+
+                    <li id="realtors" class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-toggle " data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><span th:text="#{captions.navigation.menu_1}">Риелторы</span><span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+
+                            <li sec:authorize="hasAuthority('ROLE_ADMIN')">
+                                <a href="/realtors/create"
+                                   th:text="#{captions.navigation.menu_1.item_1}">Создать</a>
+                            </li>
+                            <li>
+                                <a href="/realtors" th:text="#{captions.navigation.menu_1.item_2}">Поиск
+                                    Риелторов</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="owners" th:if="${#authentication.principal.realtor != null}" class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown"
+                           role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><span
+                                th:text="#{captions.navigation.menu_2}">Владельцы</span><span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/owners/create"
+                                   th:text="#{captions.navigation.menu_2.item_1}">Создать</a></li>
+                            <li><a href="/owners" th:text="#{captions.navigation.menu_2.item_2}">Поиск
+                                владельцев</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="clients" th:if="${#authentication.principal.realtor != null}" class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown"
+                           role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><span
+                                th:text="#{captions.navigation.menu_3}">Клиенты</span><span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/clients/create"
+                                   th:text="#{captions.navigation.menu_3.item_1}">Создать</a></li>
+                            <li><a href="/clients" th:text="#{captions.navigation.menu_3.item_2}">Поиск
+                                клиентов</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="flats" th:if="${#authentication.principal.realtor != null}" class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown"
+                           role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><span
+                                th:text="#{captions.navigation.menu_4}">Квартиры</span><span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/flats/create"
+                                   th:text="#{captions.navigation.menu_4.item_1}">Создать</a></li>
+                            <li><a href="/flats" th:text="#{captions.navigation.menu_4.item_2}">Подбор
+                                квартиры</a></li>
+                        </ul>
+                    </li>
+                    <li id="contracts" th:if="${#authentication.principal.realtor != null}" class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown"
+                           role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false"><span
+                                th:text="#{captions.navigation.menu_5}">Контракты</span><span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/contracts/sale"
+                                   th:text="#{captions.navigation.menu_5.item_1}">Продажа</a>
+                            </li>
+                            <li><a href="/contracts/rent"
+                                   th:text="#{captions.navigation.menu_5.item_2}">Аренда</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false"><span class="lang-sm lang-lbl" lang="fr"
+                                                       th:lang="${#locale.language}"/> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="?lang=ru"><span class="lang-sm lang-lbl" lang="ru"></span></a></li>
+                            <li><a href="?lang=en"><span class="lang-sm lang-lbl" lang="en"></span></a></li>
+                            <li><a href="?lang=uk"><span class="lang-sm lang-lbl" lang="uk"></span></a></li>
+                        </ul>
+                    </li>
+                    <li th:if="${#httpServletRequest.remoteUser} != null" class="dropdown">
+                        <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false">
+                            <i class="fa fa-user-o" aria-hidden="true"></i>
+                            <span th:text="${#authentication.principal.realtor == null} ? 'ADMIN': ${#authentication.principal.realtor.fullName}"></span>
+                            <!--<span class="caret"></span>-->
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <form th:action="@{/logout}" method="post"
+                                      th:if="${#httpServletRequest.remoteUser} != null">
+                                    <button class="btn col-xs-12" type="submit">
+                                        <i class="fa fa-sign-out" aria-hidden="true"></i> <span
+                                            th:text="#{captions.exit}">Выход</span>
+                                    </button>
+                                </form>
+
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+
+
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <section layout:fragment="content">
+        <p>Page content goes here</p>
+    </section>
+
+</div>
+<div id="footer">
+    <b>
+        <span class="form-control" th:text="#{text.done.by}">Done by Vladislav Voskubenko</span>
+    </b>
+</div>
+
+
+<script src="../static/js/bootstrap.min.js" th:src="@{/js/bootstrap.min.js}"></script>
+<script src="../static/js/custom.js" th:src="@{/js/custom.js}"></script>
+</body>
+</html>

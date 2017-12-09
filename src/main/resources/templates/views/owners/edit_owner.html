@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="layout">
+
+<div layout:fragment="content">
+    <div class="page-header">
+        <h1 th:text="#{captions.owners.edit.page_heading}">Редактировать Владельца</h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.owners.edit.panel_heading}">Владелец</span>
+                    <a class="pull-right" th:href="@{'/owners/remove/' + ${ownerDto.id}}" href="#" aria-label="Delete">
+                        <i class="fa fa-trash-o fa-1x" aria-hidden="true" style="color:#8a000b"></i>
+                    </a>
+                </div>
+                <div class="panel-body">
+                    <form class="col-md-12" th:action="@{/owners/edit}" th:object="${ownerDto}" method="post">
+                        <input type="hidden" th:field="*{id}"/>
+                        <div th:if="${removeError != null}" class="alert alert-danger" role="alert">
+                            <h4 th:text="#{message.errors.remove_error}">Ошибка при удалении!</h4>
+                            <small th:text="#{message.errors.remove_error.comment}">Перед удалением необходимо удалить зависимые объекты</small>
+                        </div>
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('lastName')}?'has-error'">
+                            <label class="control-label" for="lastName" th:text="#{captions.fields.last_name}">Фамилия</label>
+                            <input id="lastName" type="text" class="form-control" th:field="*{lastName}" onkeypress="onlyLetters(event)"/>
+                            <span class="help-block" th:errors="*{lastName}">[error]</span>
+                        </div>
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('firstName')}?'has-error'">
+                            <label class="control-label" for="firstName" th:text="#{captions.fields.first_name}">Имя</label>
+                            <input id="firstName" type="text" class="form-control" th:field="*{firstName}" onkeypress="onlyLetters(event)"/>
+                            <span class="help-block" th:errors="*{firstName}">[error]</span>
+                        </div>
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('surName')}?'has-error'">
+                            <label class="control-label" for="surName" th:text="#{captions.fields.sur_name}">Отчество</label>
+                            <input id="surName" type="text" class="form-control" th:field="*{surName}" onkeypress="onlyLetters(event)"/>
+                            <span class="help-block" th:errors="*{surName}">[error]</span>
+                        </div>
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('phone')}?'has-error'">
+                            <label class="control-label" for="phone" th:text="#{captions.fields.phone}">Номер телефона</label>
+                            <input id="phone" type="text" class="form-control" th:field="*{phone}" onkeypress="phoneNumber(event)"/>
+                            <span class="help-block" th:errors="*{phone}">[error]</span>
+                        </div>
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('passport')}?'has-error'">
+                            <label class="control-label" for="passport" th:text="#{captions.fields.passport}">Номер паспорта</label>
+                            <input id="passport" type="text" class="form-control" th:field="*{passport}" onkeypress="onlyLathinic(event)"/>
+                            <span class="help-block" th:errors="*{passport}">[error]</span>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary form-control" type="submit">
+                                <span th:text="#{captions.save}">Cохранить</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

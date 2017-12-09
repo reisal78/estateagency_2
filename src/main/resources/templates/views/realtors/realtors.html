@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      layout:decorator="layout">
+
+<div layout:fragment="content">
+    <div class="page-header">
+        <h1 th:text="#{captions.realtors.page_heading}">Сотрудники</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading" th:text="#{captions.realtors.find_panel_heading}">
+                    Поиск сотрудника
+                </div>
+                <div class="panel-body">
+                    <form id="filters" th:action="@{/realtors/search}" class="form-inline pull-right" method="get">
+                        <input id="page" th:value="${page.number}" type="hidden" name="page"/>
+                        <input id="size" th:value="${page.size}" type="hidden" name="size"/>
+                        <input id="selectRealtorId" type="hidden" name="id"/>
+                        <div class="form-group">
+                            <input id="search" type="text" th:value="${search}" name="search" class="form-control"
+                                   th:placeholder="#{captions.search_field}"
+                                   placeholder="Search"/>
+                        </div>
+                        <button type="submit" onclick="$('#page').val(0)" class="btn btn-default">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                        <a id="clearSearch" href="/realtors/"
+                           class="btn btn-default" th:classappend="${#strings.isEmpty(search)}?'hidden':''"><i
+                                class="fa fa-times" style="color:#c9302c" aria-hidden="true"></i></a>
+                    </form>
+
+                    <table id="searchResult" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>№</th>
+                            <th th:text="#{captions.realtors.table.column_2.name}">Full Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:classappend="${!realtor.enabled}? 'bg-danger':''"
+                            th:onclick="'selectRealtor(' + ${realtor.id} + ')'" th:each="realtor, row :${page.content}">
+                            <td th:text="${row.count} + ${page.number} * ${page.size}"></td>
+                            <td th:text="${realtor.fullName}"></td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+
+                    <div th:if="${page.finish >= 0}" class="col-xs-12">
+                        <ul class="pagination">
+                            <li th:class="${page.first} ? 'disabled':''" style="display:inline">
+                                <span th:if="${page.first}">&laquo;</span>
+                                <a th:if="${not page.first}" href="javascript:void(0)"
+                                   th:onclick="'changePage(' + 0 + ', ' + ${page.size} + ')'">&laquo;</a>
+                            </li>
+                            <li th:each="i : ${#numbers.sequence(page.start, page.finish)}"
+                                th:class="(${i}==${page.number})? 'active' : ''" style="display:inline">
+                                <span th:if='${i}==${page.number}' th:text='${i+1}'>1</span>
+                                <a th:if='${i}!=${page.number}'
+                                   th:onclick="@{'changePage(' + ${i} + ' , ' + ${page.size} + ')'}"
+                                   href="javascript:void(0)">
+                                    <span th:text='${i+1}'>1</span>
+                                </a>
+                            </li>
+                            <li th:class="${page.last} ? 'disabled':''" style="display:inline">
+                                <span th:if="${page.last}">&raquo;</span>
+                                <a th:if="${not page.last}"
+                                   href="javascript:void(0)"
+                                   th:onclick="'changePage(' + (${page.totalPages}-1) + ', ' + ${page.size} + ')'">&raquo;</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div th:if="${selectedRealtor != null}" id="details" class="panel panel-default">
+                <div class="panel-heading" th:text="#{captions.realtors.overview_panel.heading}">
+                    Информация о сотруднике
+                </div>
+                <div class="panel-body">
+                    <div class="form-group col-md-12">
+                        <label th:text="#{captions.realtors.fullName}">ФИО</label>
+                        <div id="fullName" th:text="${selectedRealtor.fullName}" class="form-controll"></div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label th:text="#{captions.realtors.phone}">Телефон</label>
+                        <div id="phone" th:text="${selectedRealtor.phone}" class="form-controll"></div>
+                    </div>
+
+                    <div sec:authorize="hasAuthority('ROLE_ADMIN')" class="text-right col-md-12">
+                        <ul class="list-inline">
+                            <li><a th:href="@{'/realtors/edit/' + ${selectedRealtor.id}}" href="#"
+                                   th:text="#{captions.edit}">Редактировать</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="layout">
+
+<div layout:fragment="content">
+    <div class="page-header">
+        <h1 th:text="#{captions.realtors.edit.page_heading}">Сотрудники</h1>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-4">
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.realtors.edit.panel_heading}">Управление сотрудниками</span>
+                    <a th:if="${#authentication.principal.realtor == null}" class="pull-right"
+                       th:href="@{'/realtors/remove/' + ${realtorDto.id}}" href="#" aria-label="Delete">
+                        <i class="fa fa-trash-o fa-1x" aria-hidden="true" style="color:#8a000b"></i>
+                    </a>
+                    <span th:if="${#authentication.principal.realtor != null}">
+                    <a th:if="${#authentication.principal.realtor.id != realtorDto.id}" class="pull-right"
+                       th:href="@{'/realtors/remove/' + ${realtorDto.id}}" href="#" aria-label="Delete">
+                        <i class="fa fa-trash-o fa-1x" aria-hidden="true" style="color:#8a000b"></i>
+                    </a>
+                    </span>
+
+                </div>
+                <div class="panel-body">
+                    <form th:action="@{/realtors/edit}"
+                          th:object="${realtorDto}" method="post">
+                        <input id="id" type="hidden" th:field="*{id}"/>
+                        <div th:if="${removeError != null}" class="alert alert-danger" role="alert">
+                            <h4 th:text="#{message.errors.remove_error}">Ошибка при удалении!</h4>
+                            <small th:text="#{message.errors.remove_error.comment}">Перед удалением необходимо удалить
+                                зависимые объекты
+                            </small>
+                        </div>
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('fullName')}?'has-error'">
+                            <label class="control-label" for="fullName"
+                                   th:text="#{captions.fields.fullname}">Фамилия, Имя, Отчество</label>
+                            <input id="fullName" type="text" class="form-control" th:field="*{fullName}"
+                                   onkeypress="onlyLetters(event)"/>
+                            <span class="help-block" th:errors="*{fullName}">[error]</span>
+                        </div>
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('phone')}?'has-error'">
+                            <label class="control-label" for="phone" th:text="#{captions.fields.phone}">Номер
+                                телефона</label>
+                            <input id="phone" type="text" class="form-control" th:field="*{phone}"
+                                   onkeypress="phoneNumber(event)"/>
+                            <span class="help-block" th:errors="*{phone}">[error]</span>
+                        </div>
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('username')}?'has-error'">
+                            <label class="control-label" for="username"
+                                   th:text="#{captions.fields.username}">Логин</label>
+                            <input id="username" type="text" class="form-control" th:field="*{username}"/>
+                            <span class="help-block" th:errors="*{username}">[error]</span>
+                        </div>
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('authority')}?'has-error'">
+                            <label class="control-label" th:text="#{captions.fields.authority}">Права
+                                пользователя</label>
+                            <select id="authority" class="form-control"
+                                    th:field="*{authority}">
+                                <option th:each="authority : ${realtorDto.authorities}"
+                                        th:value="${authority}"
+                                        th:text="${authority}">
+                                </option>
+                            </select>
+                            <span class="help-block" th:errors="*{authority}">[error]</span>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <div class="checkbox">
+                                <label>
+                                    <input th:field="*{enabled}" id="enabled" type="checkbox"/>
+                                    <span th:text="#{captions.fields.enabled}"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <input class="btn btn-primary form-control" type="submit" th:value="#{captions.save}"
+                                   value="Сохранить"/>
+                        </div>
+                    </form>
+
+                    <form th:action="@{'/realtors/change_password/' + ${realtorDto.id}}"
+                          th:object="${changePasswordForm}" method="POST">
+                        <div class="form-group"
+                             th:classappend="${#fields.hasErrors('password')}?'has-error'">
+                            <label class="control-label  col-sm-12"
+                                   th:text="#{captions.fields.new_password}">Новый пароль</label>
+                            <div class="col-xs-7">
+                                <input type="password" class="form-control"
+                                       th:field="*{password}"/>
+                            </div>
+                            <div class="col-xs-5">
+                                <button class="btn btn-success form-control" type="submit"
+                                        th:text="#{captions.edit}">Изменить
+                                </button>
+                            </div>
+                            <span class="help-block col-xs-12" th:errors="*{password}">[error]</span>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</html>

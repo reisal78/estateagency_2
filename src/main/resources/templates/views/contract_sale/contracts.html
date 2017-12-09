@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="layout">
+
+<div layout:fragment="content">
+    <div class="page-header">
+        <h1 th:text="#{captions.sale_contracts.panel_heading}">Журнал продаж</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <form id="filters" th:action="@{/contracts/sale/search}" th:object="${filters}" method="get">
+                <input id="page" th:value="${page.number}" type="hidden" name="page"/>
+                <input id="size" th:value="${page.size}" type="hidden" name="size"/>
+            </form>
+        </div>
+        <div class="col-xs-12">
+            <div class="panel panel-default">
+
+                <div class="panel-body">
+                    <div th:if="${page.finish >= 0}" id="topPagination" class="col-xs-12">
+                        <ul class="pagination">
+                            <li th:class="${page.first} ? 'disabled':''" style="display:inline">
+                                <span th:if="${page.first}">&laquo;</span>
+                                <a th:if="${not page.first}" href="javascript:void(0)"
+                                   th:onclick="'searchContracts(' + 0 + ', ' + ${page.size} + ')'">&laquo;</a>
+                            </li>
+                            <li th:each="i : ${#numbers.sequence(page.start, page.finish)}"
+                                th:class="(${i}==${page.number})? 'active' : ''" style="display:inline">
+                                <span th:if='${i}==${page.number}' th:text='${i+1}'>1</span>
+                                <a th:if='${i}!=${page.number}'
+                                   th:onclick="@{'searchContracts(' + ${i} + ' , ' + ${page.size} + ')'}"
+                                   href="javascript:void(0)">
+                                    <span th:text='${i+1}'>1</span>
+                                </a>
+                            </li>
+                            <li th:class="${page.last} ? 'disabled':''" style="display:inline">
+                                <span th:if="${page.last}">&raquo;</span>
+                                <a th:if="${not page.last}"
+                                   href="javascript:void(0)"
+                                   th:onclick="'searchContracts(' + (${page.totalPages}-1) + ', ' + ${page.size} + ')'">&raquo;</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-12">
+                        <table class="table table-responsive">
+                            <thead>
+                            <tr>
+                                <th class=""></th>
+                                <th class="">№</th>
+                                <th class="col-md-2" th:text="#{captions.fields.owner}">Owner</th>
+                                <th class="col-md-2" th:text="#{captions.fields.client}">Client</th>
+                                <th class="col-md-2" th:text="#{captions.fields.realtor}">Realtor</th>
+                                <th class="col-md-3" th:text="#{captions.fields.flat}">Flat</th>
+                                <th class="" th:text="#{captions.fields.commission}">%</th>
+                                <th class="col-md-1" th:text="#{captions.fields.service_cost}">Total price</th>
+                                <th class="col-md-2" th:text="#{captions.fields.date}">Date</th>
+                                <th class=""></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="contract : ${page.content}">
+                                <td>
+                            <span class="label"
+                                  th:classappend="(${contract.completeDate != null})?'label-success':'label-info'">
+                            <i th:if="${contract.completeDate != null}" class="fa fa-check" aria-hidden="true"></i>
+                            <i th:if="${contract.completeDate == null}" class="fa fa-bell-o" aria-hidden="true"></i>
+                            </span>
+                                </td>
+                                <td th:text="${contract.id}"></td>
+                                <td th:text="${contract.ownerFullName}"></td>
+                                <td th:text="${contract.clientFullName}"></td>
+                                <td th:text="${contract.realtorFullName}"></td>
+                                <td><a th:text="${contract.flatAddress}"
+                                       th:href="@{'/flats/overview/'+${contract.flatId}}"></a>
+                                </td>
+                                <td th:text="${contract.commission} + ' %'"></td>
+                                <td><b><span th:text="${contract.totalPrice}"></span></b></td>
+                                <td th:text="(${contract.completeDate != null})?${contract.completeDate}:${contract.createDate}"></td>
+                                <td>
+                                    <a th:href="'/contracts/sale/overview/' +${contract.flatId}">
+                                        <i class="fa fa-eye fa-2x" aria-hidden="true"></i>
+
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div th:if="${page.finish >= 0}" id="bottomPagination" class="col-xs-12">
+                        <ul class="pagination">
+                            <li th:class="${page.first} ? 'disabled':''" style="display:inline">
+                                <span th:if="${page.first}">&laquo;</span>
+                                <a th:if="${not page.first}" href="javascript:void(0)"
+                                   th:onclick="'searchContracts(' + 0 + ', ' + ${page.size} + ')'">&laquo;</a>
+                            </li>
+                            <li th:each="i : ${#numbers.sequence(page.start, page.finish)}"
+                                th:class="(${i}==${page.number})? 'active' : ''" style="display:inline">
+                                <span th:if='${i}==${page.number}' th:text='${i+1}'>1</span>
+                                <a th:if='${i}!=${page.number}'
+                                   th:onclick="@{'searchContracts(' + ${i} + ' , ' + ${page.size} + ')'}"
+                                   href="javascript:void(0)">
+                                    <span th:text='${i+1}'>1</span>
+                                </a>
+                            </li>
+                            <li th:class="${page.last} ? 'disabled':''" style="display:inline">
+                                <span th:if="${page.last}">&raquo;</span>
+                                <a th:if="${not page.last}"
+                                   href="javascript:void(0)"
+                                   th:onclick="'searchContracts(' + (${page.totalPages}-1) + ', ' + ${page.size} + ')'">&raquo;</a>
+
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!--row-->
+    <script src="../static/js/contracts.js" th:src="@{/js/contracts.js}"></script>
+</div><!--fragment-->
+
+</html>

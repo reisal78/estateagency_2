@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="layout">
+
+<div layout:fragment="content">
+
+    <div class="page-header">
+        <h1 th:text="#{captions.rent_contracts.overview.page_heading}">Просмотр контракта</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.rent_contracts.overview.panel_heading}">Подробная информация</span>
+                </div>
+                <div class="panel-body">
+                    <div class="form-horizontal col-xs-12">
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.doc_number}">№</span>:</b></div>
+                            <div class="col-xs-8">
+                                <div th:text="${contractDto.id}">
+                                    Владелец
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.date}">Дата</span>:</b></div>
+                            <div class="col-xs-8">
+                                <div th:text="${contractDto.completeDate}">
+                                    Владелец
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.type_trade}"></span>:</b></div>
+                            <div class="col-xs-8">
+                                <div th:text="#{'captions.fields.type_trade.' + ${#strings.toLowerCase(contractDto.typeTrade)}}">
+                                    TypeTrade
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.owner}">Владелец</span>:</b></div>
+                            <div class="col-xs-8">
+                                <div th:text="${contractDto.ownerFullName}">
+                                    Владелец
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.client}">Клиент</span>:</b></div>
+                            <div class="col-xs-8">
+                                <div th:text="${contractDto.clientFullName}">
+                                    Клиент
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.realtor}">Риелтор</span>:</b>
+                            </div>
+                            <div class="col-xs-8">
+                                <div th:text="${contractDto.realtorFullName}">
+                                    Владелец
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.district}">Район</span>:</b></div>
+                            <div class="col-xs-8">
+                                <div th:text="${flatDto.district}">
+                                    Район
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.flat}">Квартира</span>:</b></div>
+                            <div class="col-xs-8">
+                                <div th:text="${flatDto.address}">
+                                    Квартира
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.area}">Площадь</span>:</b></div>
+                            <div class="col-xs-8">
+                                <div th:text="${flatDto.area}">
+                                    Квартира
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.price}">Цена квартиры</span>:</b>
+                            </div>
+                            <div class="col-xs-8">
+                                <div th:text="${flatDto.price}">
+                                    Квартира
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.commission}">Комиссия</span>:</b>
+                            </div>
+                            <div class="col-xs-8">
+                                <div>
+                                    <span th:text="${contractDto.commission}"></span> %
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-4"><b><span th:text="#{captions.fields.service_cost}">Комиссия</span>:</b>
+                            </div>
+                            <div class="col-xs-8">
+                                <div th:text="${contractDto.totalPrice}">
+                                    Квартира
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div th:if="${!flatDto.available}" class="col-xs-6">
+                                <a th:href="@{'/contracts/rent/act/'+${contractDto.id}}" href="#" class="btn btn-primary form-control">
+                                    <span th:text="#{captions.print}">Печать</span></a>
+                            </div>
+
+                            <div th:if="${flatDto.available}" class="col-xs-6">
+                                <a th:href="'/contracts/rent/close?id=' + ${contractDto.id}"
+                                   class="btn btn-primary form-control ">
+                                    <span th:text="#{captions.complete}">Заключить</span>
+                                </a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a th:href="'/contracts/rent/edit?id=' + ${contractDto.flatId}"
+                                   class="btn btn-success form-control col-xs-6">
+                                    <span th:text="#{captions.edit}">Редактировать</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

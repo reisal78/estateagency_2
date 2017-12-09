@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorator="layout">
+
+<div layout:fragment="content">
+    <div class="page-header">
+        <h1 th:text="#{captions.rent_contracts.create.page_heading}">Контракт</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.rent_contracts.create.panel_heading}">Контракт</span>
+                </div>
+                <div class="panel-body">
+                    <form id="saveContract" th:action="@{'/contracts/rent/create'}"
+                          th:object="${contractDto}" method="post">
+                        <input id="id" type="hidden" th:field="*{id}"/>
+                        <input id="flatId" type="hidden" th:field="*{flatId}"/>
+                        <input id="clientId" type="hidden" th:field="*{clientId}"/>
+                        <input type="hidden" th:field="*{typeTrade}"/>
+                        <input type="hidden" th:field="*{ownerFullName}"/>
+                        <input type="hidden" th:field="*{realtorFullName}"/>
+                        <input type="hidden" th:field="*{flatAddress}"/>
+
+                        <div class="form-group col-sm-12">
+                            <label class="control-label" th:text="#{captions.fields.type_trade}">Тип</label>
+                            <div class="form-control" th:text="#{'captions.fields.type_trade.' + ${#strings.toLowerCase(contractDto.typeTrade)}}"></div>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <label class="control-label" th:text="#{captions.fields.owner}">Владелец</label>
+                            <div th:text="*{ownerFullName}" id="owner" class="form-control"/>
+                        </div>
+
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('clientFullName')}?'has-error'">
+                            <label class="control-label" th:text="#{captions.fields.client}">Клиент</label>
+                            <div class="input-group">
+                                <input th:field="*{clientFullName}" id="client" type="text"
+                                       class="form-control"
+                                       readonly="readonly"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default form-control" onclick="showClientsList()"
+                                            type="button"><i
+                                            class="fa fa-search"
+                                            aria-hidden="true"></i></button>
+                                </span>
+                            </div>
+                            <span class="help-block" th:errors="*{clientFullName}">[error]</span>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <label class="control-label" th:text="#{captions.fields.realtor}">Риелтор</label>
+
+                            <div th:text="*{realtorFullName}" id="user" class="form-control"/>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <label class="control-label" th:text="#{captions.fields.address}">Адрес</label>
+                            <div th:text="*{flatAddress}" class="form-control"/>
+                        </div>
+
+                        <div class="form-group col-sm-12"
+                             th:classappend="${#fields.hasErrors('commission')}?'has-error'">
+                            <label class="control-label" th:text="#{captions.fields.commission}">Комиссия</label>
+                            <input th:field="*{commission}" type="text" class="form-control" onkeypress="onlyNumbers(event)"/>
+                            <span class="help-block" th:errors="*{commission}">[error]</span>
+                        </div>
+
+                        <div class="form-group col-sm-12">
+                            <button id="create" type="submit" class="btn btn-primary form-control">
+                                <span th:text="#{captions.save}">Сохранить</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="clientsSearch" class="col-xs-12 col-md-5 hidden">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span th:text="#{captions.clients.find_panel_heading}">Поиск клиентов</span>
+                    <span class="pull-right"><a href="javascript:void(0)"
+                                                onclick="closeClientsList()"><i class="fa fa-times"
+                                                                                aria-hidden="true"></i></a></span>
+                </div>
+                <div class="panel-body">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <input id="search" type="text" th:value="${search}" name="search"
+                                   class="form-control"
+                                   th:placeholder="#{captions.search_field}"/>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" onclick="searchClients()" class="btn btn-default"><i
+                                    class="fa fa-search"
+                                    aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="form-group">
+                            <a id="clearSearch" href="javascript:void(0)" onclick="clearClientSearch()"
+                               class="btn btn-default hidden"><i
+                                    class="fa fa-times" style="color:#c9302c" aria-hidden="true"></i></a>
+                        </div>
+
+                    </div>
+
+                    <table id="searchResult" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>№</th>
+                            <th th:text="#{captions.fields.fullname}">Full Name</th>
+                            <th th:text="#{captions.fields.passport}">Passport</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <ul class="pagination" id="pagination">
+
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="../static/js/contracts.js" th:src="@{/js/contracts.js}"></script>
+
+</div>
+
+
+</html>

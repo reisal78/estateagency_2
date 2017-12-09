@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:with="lang=${#locale.language}"
+      th:lang="${lang}"
+>
+
+<head>
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:text="#{captions.title}">Print document</title>
+    <style>
+        body {
+            font-family: "Times New Roman";
+            font-size: 14pt;
+            margin: 50px;
+        }
+
+        p {
+            text-indent: 50px; /* Отступ первой строки в пикселах */
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <div class="col-md-10">
+        <div class="text-center" th:inline="text" style="font-size: 16pt"><strong>[[ #{act.sale.message_1} ]]</strong>
+        </div>
+        <br/>
+        <br/>
+        <div th:inline="text" class="text-justify">
+            <div class="col-xs-12">
+                <p>№ [[${contract.id}]] [[#{act.sale.message_2}]] "[[${day}]]" [[${month}]] [[${year}]]
+                    [[#{act.sale.message_3}]].</p>
+                <br/>
+                <br/>
+                <p>[[#{act.sale.message_4}]]: [[${flat.address}]], [[#{act.sale.message_5}]]: [[${flat.area}]]
+                    [[#{act.sale.message_6}]],
+                    [[#{act.sale.message_7}]]: [[${flat.floor}]], [[#{act.sale.message_8}]]: [[${flat.price}]]
+                    [[#{act.sale.message_9}]].
+                </p>
+                <p>
+                    [[#{act.sale.message_10}]]: [[${contract.ownerFullName}]].
+                </p>
+                <p>
+                    [[#{act.sale.message_11}]]: [[${contract.clientFullName}]].
+                </p>
+                <p>
+                    [[#{act.sale.message_12}]] [[${contract.totalPrice}]] [[#{act.sale.message_9}]].
+                </p>
+                <br/>
+
+
+                <p>[[#{act.sale.message_13}]]:</p>
+                <br/><br/>
+            </div>
+            <div class="col-xs-7">
+                <p> [[#{act.sale.message_14}]]: </p>
+                <p> ______________________________ </p>
+                <p>"___" __________ ____ [[#{act.sale.message_3}]].</p>
+            </div>
+            <div class="col-xs-5">
+                <p>[[#{act.sale.message_15}]]:</p>
+                <p>______________________________</p>
+                <p>"___" __________ ____ [[#{act.sale.message_3}]].</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
